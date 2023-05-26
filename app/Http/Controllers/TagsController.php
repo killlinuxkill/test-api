@@ -76,3 +76,141 @@ class TagsController extends Controller
         return new TagResource($this->getRepository()->delete($id));
     }
 }
+
+ /**
+ * @api {GET} /tags List All Tags
+ * @apiVersion 1.0.0
+ * @apiGroup Tags
+ * @apiName List All Tags
+ * @apiDescription List All Tags
+ * @apiPermission none
+ *
+ * @apiHeader {String} Accept=application/json
+ * @apiHeader {String} Content-Type=application/json
+ *
+ * @apiParam {Number} [page] page number
+ *
+ * @apiSuccessExample {json} Success-Response:
+ * HTTP/1.1 200 OK
+ * {
+ *     "data": [
+ *        {
+ *           "id": 5,
+ *           "name": "test",
+ *           "created_at": "2023-05-26T14:00:27.000000Z",
+ *           "updated_at": "2023-05-26T14:00:33.000000Z",
+ *           "deleted_at": "2023-05-26T14:00:33.000000Z",
+ *         }
+ *      ]
+ * }
+ */
+
+ /**
+ * @api {GET} /tags/{id} Show One Tags
+ * @apiVersion 1.0.0
+ * @apiGroup Tags
+ * @apiName Show One Tags
+ * @apiDescription Show One Tags
+ * @apiPermission none
+ *
+ * @apiHeader {String} Accept=application/json
+ * @apiHeader {String} Content-Type=application/json
+ *
+ * @apiSuccessExample {json} Success-Response:
+ * HTTP/1.1 200 OK
+ * {
+ *     "data":{
+ *           "id": 5,
+ *           "name": "test",
+ *           "created_at": "2023-05-26T14:00:27.000000Z",
+ *           "updated_at": "2023-05-26T14:00:33.000000Z",
+ *           "deleted_at": "2023-05-26T14:00:33.000000Z",
+ *         }
+ * }
+ */
+
+ /**
+ * @api {POST} /tags Create One Tag
+ * @apiVersion 1.0.0
+ * @apiGroup Tags
+ * @apiName Create One Tag
+ * @apiDescription Create One Tag
+ * @apiPermission none
+ *
+ * @apiHeader {String} Accept=application/json
+ * @apiHeader {String} Content-Type=application/json
+ *
+ * @apiParam {String} name min:1|max:32
+ *
+ * @apiParamExample {json} Request-Example:
+ * {
+ *      "name": "string",
+ * }
+ *
+ * @apiSuccessExample {json} Success-Response:
+ * HTTP/1.1 200 OK
+ * {
+ *     "data":{
+ *           "id": 5,
+ *           "name": "test",
+ *           "created_at": "2023-05-26T14:00:27.000000Z",
+ *           "updated_at": "2023-05-26T14:00:33.000000Z",
+ *           "deleted_at": "2023-05-26T14:00:33.000000Z",
+ *         }
+ * }
+ */
+
+ /**
+ * @api {PUT} /tags/{id} Update One Tag
+ * @apiVersion 1.0.0
+ * @apiGroup Tags
+ * @apiName Update One Tag
+ * @apiDescription Update One Tag
+ * @apiPermission none
+ *
+ * @apiHeader {String} Accept=application/json
+ * @apiHeader {String} Content-Type=application/json
+ *
+ * @apiParam {String} name min:1|max:32
+ *
+ * @apiParamExample {json} Request-Example:
+ * {
+ *      "name": "string",
+ * }
+ *
+ * @apiSuccessExample {json} Success-Response:
+ * HTTP/1.1 200 OK
+ * {
+ *     "data":{
+ *           "id": 5,
+ *           "name": "test",
+ *           "created_at": "2023-05-26T14:00:27.000000Z",
+ *           "updated_at": "2023-05-26T14:00:33.000000Z",
+ *           "deleted_at": "2023-05-26T14:00:33.000000Z",
+ *         }
+ * }
+ */
+
+/**
+ * @api {DELETE} /tags/{id} Delete One Tag
+ * @apiVersion 1.0.0
+ * @apiGroup Tags
+ * @apiName Delete One Tag
+ * @apiDescription Delete One Tag
+ * @apiPermission none
+ *
+ * @apiHeader {String} Accept=application/json
+ * @apiHeader {String} Content-Type=application/json
+ *
+ * @apiSuccessExample {json} Success-Response:
+ * HTTP/1.1 200 OK
+ * {
+ *     "data":{
+ *           "id": 5,
+ *           "name": "test",
+ *           "created_at": "2023-05-26T14:00:27.000000Z",
+ *           "updated_at": "2023-05-26T14:00:33.000000Z",
+ *           "deleted_at": "2023-05-26T14:00:33.000000Z",
+ *         }
+ * }
+ */

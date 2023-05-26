@@ -71,3 +71,182 @@ class PostsController extends Controller
         return new PostResource($this->getRepository()->delete($id));
     }
 }
+
+ /**
+ * @api {GET} /posts List All Posts
+ * @apiVersion 1.0.0
+ * @apiGroup Post
+ * @apiName List All Posts
+ * @apiDescription List All Posts
+ * @apiPermission none
+ *
+ * @apiHeader {String} Accept=application/json
+ * @apiHeader {String} Content-Type=application/json
+ *
+ * @apiParam {Number} [page] page number
+ *
+ * @apiSuccessExample {json} Success-Response:
+ * HTTP/1.1 200 OK
+ * {
+ *     "data": [
+ *        {
+ *           "id": 5,
+ *           "title": "test 1",
+ *           "description": "test 1 test 1 test 1 test 1 test 1",
+ *           "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+ *           "created_at": "2023-05-26T14:00:27.000000Z",
+ *           "updated_at": "2023-05-26T14:00:33.000000Z",
+ *           "deleted_at": "2023-05-26T14:00:33.000000Z",
+ *           "tags": []
+ *         }
+ *      ]
+ * }
+ */
+
+ /**
+ * @api {GET} /posts/{id} Show One Post
+ * @apiVersion 1.0.0
+ * @apiGroup Post
+ * @apiName Show One Post
+ * @apiDescription Show One Post
+ * @apiPermission none
+ *
+ * @apiHeader {String} Accept=application/json
+ * @apiHeader {String} Content-Type=application/json
+ *
+ * @apiSuccessExample {json} Success-Response:
+ * HTTP/1.1 200 OK
+ * {
+ *     "data":{
+ *           "id": 5,
+ *           "title": "test 1",
+ *           "description": "test 1 test 1 test 1 test 1 test 1",
+ *           "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+ *           "created_at": "2023-05-26T14:00:27.000000Z",
+ *           "updated_at": "2023-05-26T14:00:33.000000Z",
+ *           "deleted_at": "2023-05-26T14:00:33.000000Z",
+ *           "tags": []
+ *         }
+ * }
+ */
+
+ /**
+ * @api {POST} /posts Create One Post
+ * @apiVersion 1.0.0
+ * @apiGroup Post
+ * @apiName Create One Post
+ * @apiDescription Create One Post
+ * @apiPermission none
+ *
+ * @apiHeader {String} Accept=application/json
+ * @apiHeader {String} Content-Type=application/json
+ *
+ * @apiParam {String} title min:5|max:255
+ * @apiParam {String} description min:10|max:500
+ * @apiParam {String} content
+ * @apiParam {Array} tags
+ * @apiParam {Number} tags.0.id
+ * @apiParam {String} tags.0.name
+ *
+ * @apiParamExample {json} Request-Example:
+ * {
+ *      "title": "string",
+ *      "description": "description",
+ *      "content": "",
+ *      "tags": [
+ *          {"id": "1", "name": "name"},
+ *          {"id": "2", "name": "name"}
+ *          ...
+ *      ]
+ * }
+ *
+ * @apiSuccessExample {json} Success-Response:
+ * HTTP/1.1 200 OK
+ * {
+ *     "data":{
+ *           "id": 5,
+ *           "title": "test 1",
+ *           "description": "test 1 test 1 test 1 test 1 test 1",
+ *           "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+ *           "created_at": "2023-05-26T14:00:27.000000Z",
+ *           "updated_at": "2023-05-26T14:00:33.000000Z",
+ *           "deleted_at": "2023-05-26T14:00:33.000000Z",
+ *           "tags": []
+ *         }
+ * }
+ */
+
+ /**
+ * @api {PUT} /posts/{id} Update One Post
+ * @apiVersion 1.0.0
+ * @apiGroup Post
+ * @apiName Update One Post
+ * @apiDescription Update One Post
+ * @apiPermission none
+ *
+ * @apiHeader {String} Accept=application/json
+ * @apiHeader {String} Content-Type=application/json
+ *
+ * @apiParam {String} title min:5|max:255
+ * @apiParam {String} description min:10|max:500
+ * @apiParam {String} content
+ * @apiParam {Array} tags
+ * @apiParam {Number} tags[].id
+ * @apiParam {String} tags[].name
+ *
+ * @apiParamExample {json} Request-Example:
+ * {
+ *      "title": "string",
+ *      "description": "description",
+ *      "content": "",
+ *      "tags": [
+ *          {"id": "1", "name": "name"},
+ *          {"id": "2", "name": "name"}
+ *          ...
+ *      ]
+ * }
+ *
+ * @apiSuccessExample {json} Success-Response:
+ * HTTP/1.1 200 OK
+ * {
+ *     "data":{
+ *           "id": 5,
+ *           "title": "test 1",
+ *           "description": "test 1 test 1 test 1 test 1 test 1",
+ *           "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+ *           "created_at": "2023-05-26T14:00:27.000000Z",
+ *           "updated_at": "2023-05-26T14:00:33.000000Z",
+ *           "deleted_at": "2023-05-26T14:00:33.000000Z",
+ *           "tags": []
+ *         }
+ * }
+ */
+
+/**
+ * @api {DELETE} /posts/{id} Delete One Post
+ * @apiVersion 1.0.0
+ * @apiGroup Post
+ * @apiName Delete One Post
+ * @apiDescription Delete One Post
+ * @apiPermission none
+ *
+ * @apiHeader {String} Accept=application/json
+ * @apiHeader {String} Content-Type=application/json
+ *
+ * @apiSuccessExample {json} Success-Response:
+ * HTTP/1.1 200 OK
+ * {
+ *     "data":{
+ *           "id": 5,
+ *           "title": "test 1",
+ *           "description": "test 1 test 1 test 1 test 1 test 1",
+ *           "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+ *           "created_at": "2023-05-26T14:00:27.000000Z",
+ *           "updated_at": "2023-05-26T14:00:33.000000Z",
+ *           "deleted_at": "2023-05-26T14:00:33.000000Z",
+ *           "tags": []
+ *         }
+ * }
+ */
+
+
