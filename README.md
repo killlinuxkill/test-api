@@ -5,4 +5,5 @@
 - 3 composer install
 - 4 artisan migrate
 - 5 artisan db:seed
+- for apidoc generation, run apidoc_gen.sh
 
