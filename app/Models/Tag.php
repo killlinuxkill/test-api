@@ -17,4 +17,14 @@ class Tag extends Model
     {
         $query->where('language_id', $language->id);
     }
+
+    public function posts()
+    {
+        return $this->belongsToMany(\App\Models\Post::class, 'post_tags', 'tag_id', 'post_id');
+    }
+
+    public function language()
+    {
+        return $this->belongsTo(Language::class, 'language_id', 'id');
+    }
 }

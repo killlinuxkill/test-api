@@ -12,4 +12,14 @@ class Language extends Model
     protected $fillable = ['locale', 'prefix'];
 
     public $timestamps = false;
+
+    public function tags()
+    {
+        return $this->hasMany(Tag::class, 'language_id', 'id');
+    }
+
+    public function postTranslations()
+    {
+        return $this->hasMany(PostTranslation::class, 'language_id', 'id');
+    }
 }

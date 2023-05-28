@@ -23,4 +23,9 @@ class PostTranslation extends Model
     {
         $query->where('language_id', $language->id);
     }
+
+    public function post()
+    {
+        return $this->belongsTo(\App\Models\Post::class, 'post_id');
+    }
 }
