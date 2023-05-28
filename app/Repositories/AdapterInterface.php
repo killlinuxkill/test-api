@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 
 interface AdapterInterface
 {
-    public function beCollection(Model $model): Collection;
+    public static function beCollection(Model $model): Collection;
 }

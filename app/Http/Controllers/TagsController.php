@@ -47,7 +47,7 @@ class TagsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $locale, int $id)
+    public function show(int $id)
     {
         return new TagResource($this->getRepository()->get($id));
     }
@@ -55,7 +55,7 @@ class TagsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTagRequest $request, string $locale, int $id)
+    public function update(UpdateTagRequest $request, int $id)
     {
         if (!$this->getRepository()->checkIsAvailable($id)
         || $this->getRepository()->checkDuplicate($request->validated())) {
@@ -68,7 +68,7 @@ class TagsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $locale, int $id)
+    public function destroy(int $id)
     {
         if (!$this->getRepository()->checkIsAvailable($id)) {
             throw new HttpException(422, 'Tag not found by this ID or is already deleted.');
@@ -89,6 +89,7 @@ class TagsController extends Controller
  * @apiHeader {String} Content-Type=application/json
  *
  * @apiParam {Number} [page] page number
+ * @apiParam {String} language min:1|max:2
  *
  * @apiSuccessExample {json} Success-Response:
  * HTTP/1.1 200 OK
@@ -97,6 +98,7 @@ class TagsController extends Controller
  *        {
  *           "id": 5,
  *           "name": "test",
+ *           "language":"",
  *           "created_at": "2023-05-26T14:00:27.000000Z",
  *           "updated_at": "2023-05-26T14:00:33.000000Z",
  *           "deleted_at": "2023-05-26T14:00:33.000000Z",
@@ -122,6 +124,7 @@ class TagsController extends Controller
  *     "data":{
  *           "id": 5,
  *           "name": "test",
+ *           "language":"",
  *           "created_at": "2023-05-26T14:00:27.000000Z",
  *           "updated_at": "2023-05-26T14:00:33.000000Z",
  *           "deleted_at": "2023-05-26T14:00:33.000000Z",
@@ -141,10 +144,12 @@ class TagsController extends Controller
  * @apiHeader {String} Content-Type=application/json
  *
  * @apiParam {String} name min:1|max:32
+ * @apiParam {String} language min:1|max:2
  *
  * @apiParamExample {json} Request-Example:
  * {
  *      "name": "string",
+ *      "language":"",
  * }
  *
  * @apiSuccessExample {json} Success-Response:
@@ -153,6 +158,7 @@ class TagsController extends Controller
  *     "data":{
  *           "id": 5,
  *           "name": "test",
+ *           "language":"",
  *           "created_at": "2023-05-26T14:00:27.000000Z",
  *           "updated_at": "2023-05-26T14:00:33.000000Z",
  *           "deleted_at": "2023-05-26T14:00:33.000000Z",
@@ -172,10 +178,12 @@ class TagsController extends Controller
  * @apiHeader {String} Content-Type=application/json
  *
  * @apiParam {String} name min:1|max:32
+ * @apiParam {String} language min:1|max:2
  *
  * @apiParamExample {json} Request-Example:
  * {
  *      "name": "string",
+ *      "language":"",
  * }
  *
  * @apiSuccessExample {json} Success-Response:
@@ -184,6 +192,7 @@ class TagsController extends Controller
  *     "data":{
  *           "id": 5,
  *           "name": "test",
+ *           "language":"",
  *           "created_at": "2023-05-26T14:00:27.000000Z",
  *           "updated_at": "2023-05-26T14:00:33.000000Z",
  *           "deleted_at": "2023-05-26T14:00:33.000000Z",
@@ -208,6 +217,7 @@ class TagsController extends Controller
  *     "data":{
  *           "id": 5,
  *           "name": "test",
+ *           "language":"",
  *           "created_at": "2023-05-26T14:00:27.000000Z",
  *           "updated_at": "2023-05-26T14:00:33.000000Z",
  *           "deleted_at": "2023-05-26T14:00:33.000000Z",

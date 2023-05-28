@@ -9,19 +9,44 @@ use \Illuminate\Support\Collection;
 
 class PostRepository extends BaseRepository
 {
+    /**
+     * Prepare list of translites
+     */
+    public function prepareTranslations(array $listAttributes): array
+    {
+        $languages = $this->getLanguages();
+
+        //filter by available languages
+        $listAttributes = array_filter($listAttributes, function($item) use ($languages){
+            return array_key_exists($item['language'], $languages);
+        });
+        if (empty($listAttributes)) {
+            return [];
+        }
+
+        // Prepare language for each items
+        $listAttributes = array_map(function($item) use ($languages) {
+            $item['language_id'] = $languages[$item['language']]->id;
+            unset($item['language']);
+            return $item;
+        }, $listAttributes);
+
+        return $listAttributes;
+    }
+
+    /**
+     * CREATE New Post
+     */
     public function store(array $attrubutes): Collection
     {
-        $language = $this->getLanguage();
         // Create Post
         $post = Post::create();
 
-        // Create PostTraslation by currently language
-        $post->translations()->create([
-            'title' => $attrubutes['title'],
-            'description' => $attrubutes['description'],
-            'content' => $attrubutes['content'],
-            'language_id' => $language->id
-        ]);
+        if (!empty($attrubutes['translations'])) {
+            $attrubutes['translations'] = $this->prepareTranslations($attrubutes['translations']);
+        }
+
+        $post->translations()->createMany($attrubutes['translations']);
 
         // Check and add tags
         if (!empty($attrubutes['tags'])) {
@@ -29,9 +54,11 @@ class PostRepository extends BaseRepository
                 return $item['id'];
             }, $attrubutes['tags']);
 
-            $availableTags = Tag::where(['id' => $attrubutes['tags']])->byLanguage($this->getLanguage())->get();
+            $attrubutes['tags'] = array_unique($attrubutes['tags']);
+
+            $availableTags = Tag::whereIn('id', $attrubutes['tags'])->get();
+
             if (!empty($availableTags)) {
-                $post->tags()->delete();
                 $post->tags()->saveMany($availableTags);
             }
         }
@@ -39,15 +66,20 @@ class PostRepository extends BaseRepository
         return $this->beCollection($post);
     }
 
+    /**
+     * GET One
+     */
     public function get(int $id): Collection
     {
         return $this->beCollection(Post::where('id', $id)->withTrashed()->first());
     }
 
+    /**
+     * GET More
+     */
     public function getAll(array $attrubutes): LengthAwarePaginator
     {
-        $paginate = Post::whereHas('translations', $this->scopeByCurrentLanguage())
-            ->withTrashed()
+        $paginate = Post::withTrashed()
             ->paginate($this->getPerPage());
         $paginate->getCollection()
             ->transform(function ($post) {
@@ -56,28 +88,24 @@ class PostRepository extends BaseRepository
         return $paginate;
     }
 
+    /**
+     * UPDATE One
+     */
     public function update(int $id, array $attrubutes): Collection
     {
-        $language = $this->getLanguage();
         $post = Post::where(['id' => $id])->withTrashed()->first();
 
-        // Change or add translation
-        $translation = $post->translations()->byLanguage($this->getLanguage())->first();
-        if (empty($translation)) {
-            $post->translations()->create([
-                'title' => $attrubutes['title'],
-                'description' => $attrubutes['description'],
-                'content' => $attrubutes['content'],
-                'language_id' => $language->id
-            ]);
-        } else {
-            $translation->fill([
-                'title' => $attrubutes['title'],
-                'description' => $attrubutes['description'],
-                'content' => $attrubutes['content'],
-            ]);
-            $translation->save();
+        // Prepare translations
+        if (!empty($attrubutes['translations'])) {
+            $attrubutes['translations'] = $this->prepareTranslations($attrubutes['translations']);
         }
+
+        // Change or add translation
+        $translations = $post->translations;
+        if (!empty($translations)) {
+            $post->translations()->delete();
+        }
+        $post->translations()->createMany($attrubutes['translations']);
 
         // add or remove tags
         if (!empty($attrubutes['tags'])) {
@@ -85,7 +113,7 @@ class PostRepository extends BaseRepository
                 return $item['id'];
             }, $attrubutes['tags']);
 
-            $availableTags = Tag::where(['id' => $attrubutes['tags']])->byLanguage($this->getLanguage())->get();
+            $availableTags = Tag::where(['id' => $attrubutes['tags']])->get();
             if (!empty($availableTags)) {
                 $post->tags()->delete();
                 $post->tags()->saveMany($availableTags);
@@ -95,6 +123,9 @@ class PostRepository extends BaseRepository
         return $this->beCollection($post);
     }
 
+    /**
+     * DELETE One
+     */
     public function delete(int $id): Collection
     {
         $post = Post::where(['id' => $id])->first();
@@ -118,18 +149,24 @@ class PostRepository extends BaseRepository
     /**
      * Build out collection
      */
-    public function beCollection(\Illuminate\Database\Eloquent\Model $post): Collection
+    public static function beCollection(\Illuminate\Database\Eloquent\Model $post): Collection
     {
-        $translation = $post->translations()->byLanguage($this->getLanguage())->first();
-        $tags = $post->tags()->byLanguage($this->getLanguage())->get()->toArray();
+        $translations = $post->translations->transform(function ($item) {
+            return [
+                'title' => $item->title,
+                'description' => $item->description,
+                'content' => $item->content,
+                'language' => $item->language->locale
+            ];
+        })->toArray();
+
+        $tags = $post->tags->toArray();
         return collect([
             'id' => $post->id,
-            'title' => $translation->title,
-            'description' => $translation->description,
-            'content' => $translation->content,
-            'created_at' => $post->created_at,
-            'updated_at' => $post->updated_at,
-            'deleted_at' => $post->deleted_at,
+            'translations' => $translations,
+            'created_at' => (string)$post->created_at,
+            'updated_at' => (string)$post->updated_at,
+            'deleted_at' => (string)$post->deleted_at,
             'tags' => $tags
         ]);
     }

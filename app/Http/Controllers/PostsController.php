@@ -43,7 +43,7 @@ class PostsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $locale, int $id)
+    public function show(int $id)
     {
         return new PostResource($this->getRepository()->get($id));
     }
@@ -51,7 +51,7 @@ class PostsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePostRequest $request, string $locale, int $id)
+    public function update(UpdatePostRequest $request, int $id)
     {
         if (!$this->getRepository()->checkIsAvailable($id)) {
             throw new HttpException(404, 'Post not found by this ID or is already deleted.');
@@ -63,7 +63,7 @@ class PostsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $locale, int $id)
+    public function destroy(int $id)
     {
         if (!$this->getRepository()->checkIsAvailable($id)) {
             throw new HttpException(422, 'Post not found by this ID or is already deleted.');
@@ -91,9 +91,14 @@ class PostsController extends Controller
  *     "data": [
  *        {
  *           "id": 5,
- *           "title": "test 1",
- *           "description": "test 1 test 1 test 1 test 1 test 1",
- *           "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+ *           "translations": [
+ *              {
+ *                  "title": "test 1",
+ *                  "description": "test 1 test 1 test 1 test 1 test 1",
+ *                  "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+ *                  "language":ua
+ *              },
+ *           ],
  *           "created_at": "2023-05-26T14:00:27.000000Z",
  *           "updated_at": "2023-05-26T14:00:33.000000Z",
  *           "deleted_at": "2023-05-26T14:00:33.000000Z",
@@ -119,9 +124,14 @@ class PostsController extends Controller
  * {
  *     "data":{
  *           "id": 5,
- *           "title": "test 1",
- *           "description": "test 1 test 1 test 1 test 1 test 1",
- *           "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+ *           "translations": [
+ *              {
+ *                  "title": "test 1",
+ *                  "description": "test 1 test 1 test 1 test 1 test 1",
+ *                  "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+ *                  "language":ua
+ *              },
+ *           ],
  *           "created_at": "2023-05-26T14:00:27.000000Z",
  *           "updated_at": "2023-05-26T14:00:33.000000Z",
  *           "deleted_at": "2023-05-26T14:00:33.000000Z",
@@ -141,19 +151,26 @@ class PostsController extends Controller
  * @apiHeader {String} Accept=application/json
  * @apiHeader {String} Content-Type=application/json
  *
- * @apiParam {String} title min:5|max:255
- * @apiParam {String} description min:10|max:500
- * @apiParam {String} content
+ * @apiParam {Array} translitions
+ * @apiParam {String} translitions.0.title min:5|max:255
+ * @apiParam {String} translitions.0.description min:10|max:500
+ * @apiParam {String} translitions.0.content
+ * @apiParam {String} translitions.0.language min:1|max:2
  * @apiParam {Array} tags
  * @apiParam {Number} tags.0.id
  * @apiParam {String} tags.0.name
  *
  * @apiParamExample {json} Request-Example:
  * {
- *      "title": "string",
- *      "description": "description",
- *      "content": "",
- *      "tags": [
+ *       "translations": [
+ *              {
+ *                  "title": "test 1",
+ *                  "description": "test 1 test 1 test 1 test 1 test 1",
+ *                  "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+ *                  "language":ua
+ *              },
+ *           ],
+ *       "tags": [
  *          {"id": "1", "name": "name"},
  *          {"id": "2", "name": "name"}
  *          ...
@@ -165,9 +182,14 @@ class PostsController extends Controller
  * {
  *     "data":{
  *           "id": 5,
- *           "title": "test 1",
- *           "description": "test 1 test 1 test 1 test 1 test 1",
- *           "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+ *           "translations": [
+ *              {
+ *                  "title": "test 1",
+ *                  "description": "test 1 test 1 test 1 test 1 test 1",
+ *                  "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+ *                  "language":ua
+ *              },
+ *           ],
  *           "created_at": "2023-05-26T14:00:27.000000Z",
  *           "updated_at": "2023-05-26T14:00:33.000000Z",
  *           "deleted_at": "2023-05-26T14:00:33.000000Z",
@@ -187,18 +209,25 @@ class PostsController extends Controller
  * @apiHeader {String} Accept=application/json
  * @apiHeader {String} Content-Type=application/json
  *
- * @apiParam {String} title min:5|max:255
- * @apiParam {String} description min:10|max:500
- * @apiParam {String} content
+ * @apiParam {Array} translitions
+ * @apiParam {String} translitions.0.title min:5|max:255
+ * @apiParam {String} translitions.0.description min:10|max:500
+ * @apiParam {String} translitions.0.content
+ * @apiParam {String} translitions.0.language min:1|max:2
  * @apiParam {Array} tags
  * @apiParam {Number} tags[].id
  * @apiParam {String} tags[].name
  *
  * @apiParamExample {json} Request-Example:
  * {
- *      "title": "string",
- *      "description": "description",
- *      "content": "",
+ *       "translations": [
+ *              {
+ *                  "title": "test 1",
+ *                  "description": "test 1 test 1 test 1 test 1 test 1",
+ *                  "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+ *                  "language":ua
+ *              },
+ *       ],
  *      "tags": [
  *          {"id": "1", "name": "name"},
  *          {"id": "2", "name": "name"}
@@ -211,9 +240,14 @@ class PostsController extends Controller
  * {
  *     "data":{
  *           "id": 5,
- *           "title": "test 1",
- *           "description": "test 1 test 1 test 1 test 1 test 1",
- *           "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+ *           "translations": [
+ *              {
+ *                  "title": "test 1",
+ *                  "description": "test 1 test 1 test 1 test 1 test 1",
+ *                  "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+ *                  "language":ua
+ *              },
+ *           ],
  *           "created_at": "2023-05-26T14:00:27.000000Z",
  *           "updated_at": "2023-05-26T14:00:33.000000Z",
  *           "deleted_at": "2023-05-26T14:00:33.000000Z",
@@ -238,9 +272,14 @@ class PostsController extends Controller
  * {
  *     "data":{
  *           "id": 5,
- *           "title": "test 1",
- *           "description": "test 1 test 1 test 1 test 1 test 1",
- *           "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+ *           "translations": [
+ *              {
+ *                  "title": "test 1",
+ *                  "description": "test 1 test 1 test 1 test 1 test 1",
+ *                  "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+ *                  "language":ua
+ *              },
+ *           ],
  *           "created_at": "2023-05-26T14:00:27.000000Z",
  *           "updated_at": "2023-05-26T14:00:33.000000Z",
  *           "deleted_at": "2023-05-26T14:00:33.000000Z",

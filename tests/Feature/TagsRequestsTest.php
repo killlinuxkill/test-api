@@ -11,9 +11,9 @@ class TagsRequestsTest extends TestCase
 {
     use WithFaker, TraitAnyTag, TraitAllRequests;
 
-    public function requestIndex($locale): void
+    public function requestIndex(): void
     {
-        $response = $this->getJson('/'.$locale.'/tags');
+        $response = $this->getJson('/tags');
         $response->assertStatus(200);
     }
 
@@ -21,12 +21,13 @@ class TagsRequestsTest extends TestCase
     {
         $this->setUpFaker();
         $name = $this->faker->name();
-        $response = $this->postJson('/'.$locale.'/tags', ['name' => $name]);
+        $response = $this->postJson('/tags', ['name' => $name, "language" => $locale]);
         $response->assertStatus(200)
         ->assertJsonStructure([
             "data" => [
                 "id",
                 "name",
+                "language",
                 "created_at",
                 "updated_at",
                 "deleted_at"
@@ -37,18 +38,20 @@ class TagsRequestsTest extends TestCase
     public function requestShow($locale): void
     {
         $data = $this->getAnyTag($locale);
-        $response = $this->getJson('/'.$locale.'/tags/' . $data['id']);
+        $response = $this->getJson('tags/' . $data['id']);
         $response->assertStatus(200)
         ->assertJson(['data' => $data]);
     }
 
     public function requestUpdate($locale): void
     {
+        $this->setUpFaker();
         $name = $this->faker->name();
         $data = $this->getAnyTag($locale);
         $data['name'] = $name;
-        $response = $this->putJson('/'.$locale.'/tags/' . $data['id'], [
-            'name' => $name
+        $response = $this->putJson('tags/' . $data['id'], [
+            'name' => $name,
+            "language" => $locale
         ]);
         $response->assertStatus(200)
         ->assertJson(['data' => $data]);
@@ -57,7 +60,7 @@ class TagsRequestsTest extends TestCase
     public function requestDestroy($locale): void
     {
         $data = $this->getAnyTag($locale);
-        $response = $this->deleteJson('/'.$locale.'/tags/' . $data['id']);
+        $response = $this->deleteJson('tags/' . $data['id']);
         $response->assertStatus(200);
     }
 }

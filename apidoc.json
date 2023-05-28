@@ -1,6 +1,6 @@
 {
   "name": "TestApi Laravel",
   "version": "1.0.0",
-  "description": "TestApi Laravel. {locale prefix} can be en|ua|ru",
-  "url" : "https://test-api.pc/{locale prefix}"
+  "description": "TestApi Laravel",
+  "url" : "https://test-api.pc/"
 }

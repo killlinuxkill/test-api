@@ -16,11 +16,5 @@ use App\Http\Controllers\{PostsController, TagsController};
 |
 */
 
-/*Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});*/
-
-Route::middleware('locale')->prefix('{locale}')->group(function () {
-    Route::resource('/posts', PostsController::class);
-    Route::resource('/tags', TagsController::class);
-});
+Route::resource('/posts', PostsController::class);
+Route::resource('/tags', TagsController::class);

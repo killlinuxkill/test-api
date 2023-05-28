@@ -15,10 +15,18 @@ class EmptyPostResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'title' => '',
-            'description' => '',
-            'content' => '',
-            'tags' => []
+            'translations' => [
+                [
+                    'title' => '',
+                    'description' => '',
+                    'content' => '',
+                    'language' => ''
+                ]
+            ],
+            'tags' => [],
+            'created_at' => '',
+            'updated_at' => '',
+            'deleted_at' => '',
         ];
     }
 }

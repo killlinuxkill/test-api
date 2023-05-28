@@ -9,24 +9,33 @@ use \Illuminate\Pagination\LengthAwarePaginator;
 
 class TagRepository extends BaseRepository
 {
+    /**
+     * CREATE New
+     */
     public function store(array $attributes): Collection
     {
         $tag = Tag::create([
             'name' => $attributes['name'],
-            'language_id' => $this->getLanguage()->id
+            'language_id' => $this->getLanguage($attributes['language'])->id
         ]);
         return $this->beCollection($tag);
     }
 
+    /**
+     * GET One
+     */
     public function get(int $id): Collection
     {
-        $tag = Tag::where('id', $id)->withTrashed()->byLanguage($this->getLanguage())->first();
+        $tag = Tag::where('id', $id)->withTrashed()->first();
         return $this->beCollection($tag);
     }
 
+    /**
+     * GET More
+     */
     public function getAll(array $attrubutes): LengthAwarePaginator
     {
-        $paginate = Tag::byLanguage($this->getLanguage())->withTrashed()
+        $paginate = Tag::withTrashed()
             ->paginate($this->getPerPage());
         $paginate->getCollection()
             ->transform(function ($item) {
@@ -35,6 +44,9 @@ class TagRepository extends BaseRepository
         return $paginate;
     }
 
+    /**
+     * UPDATE One
+     */
     public function update(int $id, array $attrubutes): Collection
     {
         $tag = Tag::where('id', $id)->withTrashed()->first();
@@ -43,6 +55,9 @@ class TagRepository extends BaseRepository
         return $this->beCollection($tag);
     }
 
+    /**
+     * DELETE One
+     */
     public function delete(int $id): Collection
     {
         $tag = Tag::where('id', $id)->first();
@@ -57,17 +72,18 @@ class TagRepository extends BaseRepository
 
     public function checkDuplicate(array $attributes): bool
     {
-        return Tag::where('name', $attributes['name'])->withTrashed()->byLanguage($this->getLanguage())->count();
+        return Tag::where('name', $attributes['name'])->withTrashed()->count();
     }
 
-    public function beCollection(\Illuminate\Database\Eloquent\Model $tag): Collection
+    public static function beCollection(\Illuminate\Database\Eloquent\Model $tag): Collection
     {
         return collect([
             'id' => $tag->id,
             'name' => $tag->name,
-            'created_at' => $tag->created_at,
-            'updated_at' => $tag->updated_at,
-            'deleted_at' => $tag->deleted_at
+            'language' => $tag->language->locale,
+            'created_at' => (string)$tag->created_at,
+            'updated_at' => (string)$tag->updated_at,
+            'deleted_at' => (string)$tag->deleted_at
         ]);
     }
 }

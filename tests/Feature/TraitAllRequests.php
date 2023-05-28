@@ -7,7 +7,7 @@ trait TraitAllRequests
     // INDEX
     public function test_en_index()
     {
-        $this->requestIndex('en');
+        $this->requestIndex();
     }
 
     public function test_ua_index()

@@ -10,41 +10,9 @@ use \Illuminate\Pagination\LengthAwarePaginator;
 
 class BaseRepository implements RepositoryInterface, ValidateInterface, AdapterInterface
 {
-    protected $language;
     protected $per_page = 10;
 
-    /**
-     * Init current language by prefix
-     */
-    public function __construct(string $locale)
-    {
-        $this->initLanguage($locale);
-    }
-
-    /**
-     * Init Language
-     */
-    public function initLanguage(string $locale = null): BaseRepository
-    {
-        if (!is_null($locale)) {
-            $language = Language::where('locale', $locale)->first();
-            if (!empty($language)) {
-                $this->language = $language;
-            }
-        }
-        return $this;
-    }
-
-    public function setLanguage(Language $language): BaseRepository
-    {
-        $this->language = $language;
-        return $this;
-    }
-
-    public function getLanguage(): Language
-    {
-        return $this->language;
-    }
+    protected $languages = [];
 
     public function setPerPage(int $per_page): BaseRepository
     {
@@ -55,6 +23,28 @@ class BaseRepository implements RepositoryInterface, ValidateInterface, AdapterI
     public function getPerPage(): int
     {
         return $this->per_page;
+    }
+
+    public function getLanguages()
+    {
+        if (!empty($this->languages)) {
+            return $this->languages;
+        }
+
+        foreach(Language::get() as $item) {
+            $this->languages[$item->locale] = $item;
+        }
+
+        if (empty($this->languages)) {
+            throw new \Exception('Language list cannot be empty.');
+        }
+
+        return $this->languages;
+    }
+
+    public function getLanguage($locale)
+    {
+        return $this->getLanguages()[$locale];
     }
 
     /**
@@ -94,7 +84,7 @@ class BaseRepository implements RepositoryInterface, ValidateInterface, AdapterI
         return collect([]);
     }
 
-    public function beCollection(Model $model): Collection
+    public static function beCollection(Model $model): Collection
     {
         return collect([]);
     }

@@ -15,11 +15,12 @@ class EmptyTagResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id',
-            'name',
-            'created_at',
-            'updated_at',
-            'deleted_at'
+            'id' => '',
+            'name' => '',
+            'language' => '',
+            'created_at' => '',
+            'updated_at' => '',
+            'deleted_at' => ''
         ];
     }
 }
