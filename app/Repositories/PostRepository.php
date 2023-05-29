@@ -120,6 +120,8 @@ class PostRepository extends BaseRepository
             }
         }
 
+        $post->refresh();
+
         return $this->beCollection($post);
     }
 
