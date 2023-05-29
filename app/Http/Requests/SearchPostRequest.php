@@ -21,6 +21,11 @@ class SearchPostRequest extends ListPostRequest
      */
     public function rules(): array
     {
-        return parent::rules();
+        return array_merge(
+            parent::rules(),
+            [
+                'query' => 'required|string'
+            ]
+        );
     }
 }

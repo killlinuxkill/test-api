@@ -6,6 +6,7 @@ use App\Models\{Post, PostTranslation, Language, Tag};
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use \Illuminate\Pagination\LengthAwarePaginator;
 use \Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class PostRepository extends BaseRepository
 {
@@ -120,6 +121,8 @@ class PostRepository extends BaseRepository
             }
         }
 
+        $post->refresh();
+
         return $this->beCollection($post);
     }
 
@@ -131,6 +134,33 @@ class PostRepository extends BaseRepository
         $post = Post::where(['id' => $id])->first();
         $post->delete();
         return $this->beCollection($post);
+    }
+
+    /**
+     * SEARCH
+     */
+    public function search(string $queryString, string $type = 'all'): LengthAwarePaginator
+    {
+        $getQueryBuilder = function() use ($type, $queryString) {
+            return Post::whereHas('translations', function(Builder $query) use ($type, $queryString){
+                if ($type == 'all') {
+                    $query->whereFullText(['title', 'description', 'content'], $queryString);
+                } else {
+                    $query->whereFullText($type, $queryString);
+                }
+            });
+        };
+
+        $type = in_array($type, ['title', 'description', 'content']) ? $type : 'all';
+
+        $queryBuilder = $getQueryBuilder();
+
+        $paginate = $queryBuilder->paginate($this->getPerPage());
+        $paginate->getCollection()
+            ->transform(function ($post) {
+                return $this->beCollection($post);
+            });
+        return $paginate;
     }
 
     /**

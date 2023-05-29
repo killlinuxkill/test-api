@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Repositories\TagRepository;
 use App\Http\Resources\{TagResource, EmptyTagResource};
-use App\Http\Requests\{StoreTagRequest, SearchTagRequest, UpdateTagRequest};
+use App\Http\Requests\{StoreTagRequest, ListTagRequest, UpdateTagRequest};
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class TagsController extends Controller
@@ -18,7 +18,7 @@ class TagsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(SearchTagRequest $request)
+    public function index(ListTagRequest $request)
     {
         return new TagResource($this->getRepository()->getAll($request->validated()));
     }

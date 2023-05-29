@@ -77,10 +77,12 @@ class PostsRequestTest extends TestCase
 
         $data = $this->getAnyPost();
         foreach ($data['translations'] as &$item) {
-            $item['title'] = $this->faker->name() . $item['language'];
+            $item['title'] = $this->faker->name() . ' ' . $item['language'];
         }
 
-        $response = $this->putJson('posts/' . $data['id'], $data);
+        $requestData = $data;
+        unset($requestData['id']);
+        $response = $this->putJson('posts/' . $data['id'], $requestData);
         $response->assertStatus(200)
             ->assertExactJson(['data' => $data]);
     }

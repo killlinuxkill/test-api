@@ -28,6 +28,8 @@ return new class extends Migration
             $table->fullText('title');
             $table->fullText('description');
             $table->fullText('content');
+
+            $table->fullText(['title', 'description', 'content']);
         });
     }
 

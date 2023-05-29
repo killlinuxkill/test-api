@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Http\Request;
 use App\Repositories\PostRepository;
 use App\Http\Resources\{PostResource, EmptyPostResource};
-use App\Http\Requests\{StorePostRequest, SearchPostRequest, UpdatePostRequest};
+use App\Http\Requests\{StorePostRequest, ListPostRequest, UpdatePostRequest};
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class PostsController extends Controller
@@ -19,7 +19,7 @@ class PostsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(SearchPostRequest $request)
+    public function index(ListPostRequest $request)
     {
         return new PostResource($this->getRepository()->getAll($request->validated()));
     }

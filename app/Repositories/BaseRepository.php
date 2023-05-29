@@ -84,6 +84,11 @@ class BaseRepository implements RepositoryInterface, ValidateInterface, AdapterI
         return collect([]);
     }
 
+    public function search(string $queryString, string $type): LengthAwarePaginator
+    {
+
+    }
+
     public static function beCollection(Model $model): Collection
     {
         return collect([]);
