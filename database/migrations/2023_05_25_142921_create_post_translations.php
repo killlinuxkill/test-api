@@ -23,8 +23,11 @@ return new class extends Migration
             $table->foreign('language_id')->references('id')->on('languages');
 
             $table->unique(['post_id', 'language_id']);
+
             // Also, we can add a fulltext index or use third-party systems for search
-            // $table->fullText('content');
+            $table->fullText('title');
+            $table->fullText('description');
+            $table->fullText('content');
         });
     }
 

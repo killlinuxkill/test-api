@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SearchPostRequest extends FormRequest
+class SearchPostRequest extends ListPostRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,8 +21,6 @@ class SearchPostRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'page' => 'nullable|numeric'
-        ];
+        return parent::rules();
     }
 }

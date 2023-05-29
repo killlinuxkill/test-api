@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SearchTagRequest extends ListTagRequest
+class ListTagRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,6 +21,8 @@ class SearchTagRequest extends ListTagRequest
      */
     public function rules(): array
     {
-        return parent::rules();
+        return [
+            'page' => 'nullable|numeric'
+        ];
     }
 }
